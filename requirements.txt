@@ -1,0 +1,4 @@
+flask-restplus
+flask
+requests
+beautifulsoup4
