@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 from consts import DRAFTHOUSE_MARKETS, DRAFTHOUSE_BASE_URL
 from multiprocessing.pool import ThreadPool
+from cache import cache_markets, check_cache_market
 
 
 class Market:
@@ -30,7 +31,7 @@ def _get_market_id(market_short_name):
     return market_id
 
 
-def update_market_info():
+def update_market_cache():
     results = []
     r = requests.get(DRAFTHOUSE_MARKETS)
     content = r.content
@@ -46,10 +47,9 @@ def update_market_info():
     for m in markets:
         results.append(Market(m[0][0], m[0][1], m[1]))
 
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(current_dir, "cache", "markets.json")
-    with open(file_path, "w+") as markets_data:
-        json.dump(results, markets_data, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+    market_json = json.dumps(results, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+    cache_markets(market_json)
+    return market_json
 
 
 def get_all_markets():
@@ -57,15 +57,14 @@ def get_all_markets():
     Return a list of all markets the alamo drafthouse is in
     :return: List of markets
     """
+    markets = []
     try:
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        file_path = os.path.join(current_dir, "cache", "markets.json")
-        with open(file_path, "r") as markets_data:
-            results = json.load(markets_data)
-    except:
-        results = []
+        markets = check_cache_market() or update_market_cache()
+    except Exception as e:
+        print e
+        markets = []
 
-    return results
+    return markets
 
 
 if __name__ == '__main__':

@@ -2,3 +2,4 @@ flask-restplus
 flask
 requests
 beautifulsoup4
+redis

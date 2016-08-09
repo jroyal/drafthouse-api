@@ -17,7 +17,7 @@ def cache_feed_result(feed):
     current_dir = os.path.dirname(os.path.realpath(__file__))
     today = date.today().strftime("%Y%m%d")
     filename = "{}-drafthousefeed.json".format(today)
-    file_path = os.path.join(current_dir, "cache", filename)
+    file_path = os.path.join(current_dir, "data", filename)
     with open(file_path, "w+") as f:
         json.dump(feed, f)
 
@@ -27,7 +27,7 @@ def check_cache():
     current_dir = os.path.dirname(os.path.realpath(__file__))
     today = date.today().strftime("%Y%m%d")
     filename = "{}-drafthousefeed.json".format(today)
-    file_path = os.path.join(current_dir, "cache", filename)
+    file_path = os.path.join(current_dir, "data", filename)
     if os.path.isfile(file_path):
         with open(file_path, "r+") as f:
             feed = json.load(f)
