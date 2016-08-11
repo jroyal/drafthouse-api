@@ -1,6 +1,7 @@
 from flask_restplus import Resource, fields
 from api import drafthouse_api
 from drafthouse.markets import get_all_markets
+from drafthouse.cinemas import get_cinemas
 ns = drafthouse_api.namespace('markets', description='Market operations')
 
 market = drafthouse_api.model('Market', {
@@ -19,3 +20,15 @@ class Markets(Resource):
         Get all markets
         """
         return get_all_markets()
+
+
+@ns.route('/<string:market_id>/cinemas')
+@ns.param('market_id', 'The 4 digit market id')
+class MarketCinemas(Resource):
+
+    def get(self, market_id):
+        """
+        Get all cinemas in a market
+        :return:
+        """
+        return get_cinemas(market_id)

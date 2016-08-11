@@ -42,7 +42,6 @@ def update_market_cache():
     markets = zip(markets, pool.map(_get_market_id, [m[1] for m in markets]))
     pool.close()
     pool.join()
-    print markets
 
     for m in markets:
         results.append(Market(m[0][0], m[0][1], m[1]))
