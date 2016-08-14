@@ -1,5 +1,6 @@
 from api import drafthouse_app
 from api import markets
+from api import cinemas
 import os
 
 if __name__ == '__main__':
